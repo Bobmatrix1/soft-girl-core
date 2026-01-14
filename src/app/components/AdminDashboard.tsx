@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { X, Package, ShoppingBag, Plus, Edit, Trash2, Tag, Upload, CheckCircle, ChevronDown, Bell, Send, Sparkles, Settings } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -151,14 +151,14 @@ function OrderCard({ order, onStatusUpdate }: { order: Order; onStatusUpdate: (s
 
       <div className="space-y-2">
         <Label className="text-xs">Update Status</Label>
-        <div className="grid grid-cols-5 gap-1">
+        <div className="flex flex-wrap gap-2">
           {orderStatuses.map((status) => (
             <Button
               key={status}
               size="sm"
               variant={order.status === status ? 'default' : 'outline'}
               onClick={() => onStatusUpdate(status)}
-              className="text-xs px-2"
+              className="text-xs px-2 flex-1"
             >
               {status}
             </Button>

@@ -1,6 +1,6 @@
 import { Bell, X, Trash2 } from 'lucide-react';
 import { Button } from './ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Notification } from '../utils/api';
 import { useEffect, useRef, useState } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';

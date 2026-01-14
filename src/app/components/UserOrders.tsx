@@ -5,7 +5,7 @@ import { Badge } from './ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';
 import { Order, fetchUserOrders, updateOrderStatus, deleteOrder, Product, fetchProducts, fetchProduct } from '../utils/api';
 import { toast } from 'sonner';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 
 interface UserOrdersProps {
   onClose: () => void;

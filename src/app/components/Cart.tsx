@@ -5,18 +5,17 @@ import { motion, AnimatePresence } from 'motion/react';
 import { CartItem, Product } from '../utils/api';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { fetchCoupon } from '../utils/api';
 
 interface CartProps {
   isOpen: boolean;
   onClose: () => void;
   items: CartItem[];
-  onUpdateQuantity: (productId: string, quantity: number) => void;
-  onRemoveItem: (productId: string) => void;
+  onUpdateQuantity: (productId: string, quantity: number, color?: string, size?: string) => void;
+  onRemoveItem: (productId: string, color?: string, size?: string) => void;
   onCheckout: (couponCode?: string, discount?: number) => void;
   user: any;
 }
-
-import { fetchCoupon } from '../utils/api';
 
 export default function Cart({ isOpen, onClose, items, onUpdateQuantity, onRemoveItem, onCheckout, user }: CartProps) {
   const [couponCode, setCouponCode] = useState('');
@@ -119,7 +118,7 @@ export default function Cart({ isOpen, onClose, items, onUpdateQuantity, onRemov
                 <div className="space-y-4">
                   {items.map((item) => (
                     <motion.div
-                      key={item.productId}
+                      key={`${item.productId}-${item.selectedColor || 'nc'}-${item.selectedSize || 'ns'}`}
                       layout
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -170,7 +169,7 @@ export default function Cart({ isOpen, onClose, items, onUpdateQuantity, onRemov
                             variant="outline"
                             size="icon"
                             className="h-8 w-8 rounded-full"
-                            onClick={() => onUpdateQuantity(item.productId, Math.max(1, item.quantity - 1))}
+                            onClick={() => onUpdateQuantity(item.productId, Math.max(1, item.quantity - 1), item.selectedColor, item.selectedSize)}
                           >
                             <Minus className="w-3 h-3" />
                           </Button>
@@ -179,7 +178,7 @@ export default function Cart({ isOpen, onClose, items, onUpdateQuantity, onRemov
                             variant="outline"
                             size="icon"
                             className="h-8 w-8 rounded-full"
-                            onClick={() => onUpdateQuantity(item.productId, item.quantity + 1)}
+                            onClick={() => onUpdateQuantity(item.productId, item.quantity + 1, item.selectedColor, item.selectedSize)}
                           >
                             <Plus className="w-3 h-3" />
                           </Button>
@@ -187,7 +186,7 @@ export default function Cart({ isOpen, onClose, items, onUpdateQuantity, onRemov
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 ml-auto text-destructive"
-                            onClick={() => onRemoveItem(item.productId)}
+                            onClick={() => onRemoveItem(item.productId, item.selectedColor, item.selectedSize)}
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>

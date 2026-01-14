@@ -231,7 +231,7 @@ export default function Navbar({
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              transition={{ type: 'tween', duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
               className="fixed left-0 top-0 z-50 h-full w-80 bg-white/80 backdrop-blur-xl shadow-2xl border-r border-white/20 p-6 flex flex-col"
             >
               {/* Header */}

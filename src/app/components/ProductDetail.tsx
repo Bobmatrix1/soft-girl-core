@@ -14,6 +14,7 @@ interface ProductDetailProps {
   allProducts: Product[];
   onClose: () => void;
   onAddToCart: (product: Product, quantity: number, color?: string, size?: string) => void;
+  onBuyNow: (product: Product, quantity: number, color?: string, size?: string) => void;
   onProductSelect: (product: Product) => void;
   user: any;
 }
@@ -38,7 +39,7 @@ const MiniProductCard = ({ product, onClick }: { product: Product, onClick: (p: 
     );
 };
 
-export default function ProductDetail({ product, allProducts, onClose, onAddToCart, onProductSelect, user }: ProductDetailProps) {
+export default function ProductDetail({ product, allProducts, onClose, onAddToCart, onBuyNow, onProductSelect, user }: ProductDetailProps) {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -136,6 +137,17 @@ export default function ProductDetail({ product, allProducts, onClose, onAddToCa
     toast.success(`Added ${quantity} ${quantity > 1 ? 'items' : 'item'} to cart!`);
   };
 
+  const handleBuyNow = () => {
+    if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+        toast.error('Please select a size');
+        return;
+    }
+    if (product.colors && product.colors.length > 0 && !selectedColor) {
+        toast.error('Please select a color');
+        return;
+    }
+    onBuyNow(product, quantity, selectedColor, selectedSize);
+  };
 
   const handleNotifyMe = async () => {
       if (!user) {
@@ -301,7 +313,7 @@ export default function ProductDetail({ product, allProducts, onClose, onAddToCa
               ) : (
                 <>
                     <Button size="lg" className="flex-1 bg-primary hover:bg-primary/90" onClick={handleAddToCart}><ShoppingCart className="w-5 h-5 mr-2" /> Add to Cart</Button>
-                    <Button size="lg" className="flex-1 bg-accent hover:bg-accent/90">Buy Now</Button>
+                    <Button size="lg" className="flex-1 bg-accent hover:bg-accent/90" onClick={handleBuyNow}>Buy Now</Button>
                 </>
               )}
             </div>

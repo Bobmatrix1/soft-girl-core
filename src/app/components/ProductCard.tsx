@@ -8,12 +8,13 @@ import { useState } from 'react';
 interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product) => void;
+  onBuyNow: (product: Product) => void;
   onLike: (productId: string) => void;
   onClick: (product: Product) => void;
   isHighlighted?: boolean;
 }
 
-export default function ProductCard({ product, onAddToCart, onLike, onClick, isHighlighted }: ProductCardProps) {
+export default function ProductCard({ product, onAddToCart, onBuyNow, onLike, onClick, isHighlighted }: ProductCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(product.likes);
 
@@ -34,6 +35,12 @@ export default function ProductCard({ product, onAddToCart, onLike, onClick, isH
     e.stopPropagation();
     if (product.status === 'out_of_stock') return;
     onAddToCart(product);
+  };
+
+  const handleBuyNow = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (product.status === 'out_of_stock') return;
+    onBuyNow(product);
   };
 
   const discount = product.slashPrice 
@@ -90,14 +97,21 @@ export default function ProductCard({ product, onAddToCart, onLike, onClick, isH
         
         {/* Quick Add - Shown on hover (if in stock) */}
         {currentStatus === 'in_stock' && (
-            <div className="absolute inset-x-0 bottom-0 p-2 sm:p-4 bg-gradient-to-t from-black/60 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute inset-x-0 bottom-0 p-2 sm:p-4 bg-gradient-to-t from-black/60 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 grid grid-cols-2 gap-2">
             <Button
                 onClick={handleAddToCart}
                 size="sm"
                 className="w-full bg-white text-primary hover:bg-primary hover:text-white transition-all text-xs sm:text-sm h-8 sm:h-9"
             >
                 <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                Add to Cart
+                Add
+            </Button>
+            <Button
+                onClick={handleBuyNow}
+                size="sm"
+                className="w-full bg-primary text-white hover:bg-primary/90 transition-all text-xs sm:text-sm h-8 sm:h-9"
+            >
+                Buy Now
             </Button>
             </div>
         )}

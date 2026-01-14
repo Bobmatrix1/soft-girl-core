@@ -38,9 +38,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
             muted
             playsInline
             onEnded={handleComplete}
-            className="w-full h-full md:object-contain object-cover"
-            src="/intro.MP4?v=2" 
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+            className="absolute inset-0 w-full h-full object-cover scale-[1.02]"
           >
             <source src="/intro.MP4?v=2" type="video/mp4" />
             Your browser does not support the video tag.

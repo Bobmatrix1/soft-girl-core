@@ -330,6 +330,7 @@ export default function App() {
       newItems = [...cartItems, { productId: product.id, quantity, product, selectedColor: color, selectedSize: size }];
     }
     setCartItems(newItems);
+    toast.success('Added to cart');
     try {
       await updateCart(user.uid, { items: newItems.map(({ product, ...item }) => item) });
     } catch (error) {
@@ -337,9 +338,17 @@ export default function App() {
     }
   };
 
-  const handleUpdateQuantity = async (productId: string, quantity: number) => {
+  const handleBuyNow = async (product: Product, quantity: number = 1, color?: string, size?: string) => {
+    await handleAddToCart(product, quantity, color, size);
+    setIsCartOpen(false);
+    setIsCheckoutOpen(true);
+  };
+
+  const handleUpdateQuantity = async (productId: string, quantity: number, color?: string, size?: string) => {
     const newItems = cartItems.map(item =>
-      item.productId === productId ? { ...item, quantity } : item
+      (item.productId === productId && item.selectedColor === color && item.selectedSize === size) 
+        ? { ...item, quantity } 
+        : item
     );
     setCartItems(newItems);
     if (user) {
@@ -351,8 +360,10 @@ export default function App() {
     }
   };
 
-  const handleRemoveItem = async (productId: string) => {
-    const newItems = cartItems.filter(item => item.productId !== productId);
+  const handleRemoveItem = async (productId: string, color?: string, size?: string) => {
+    const newItems = cartItems.filter(item => 
+      !(item.productId === productId && item.selectedColor === color && item.selectedSize === size)
+    );
     setCartItems(newItems);
     if (user) {
       try {
@@ -525,7 +536,7 @@ export default function App() {
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
                 {filteredProducts.slice(0, displayLimit).map((product, index) => (
                   <motion.div key={product.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: (index % 30) * 0.05 }}>
-                    <ProductCard product={product} onAddToCart={(p, q, c, s) => handleAddToCart(p, q, c, s)} onLike={handleLike} onClick={setSelectedProduct} isHighlighted={highlightedProductIds.includes(product.id)} />
+                    <ProductCard product={product} onAddToCart={(p, q, c, s) => handleAddToCart(p, q, c, s)} onBuyNow={(p) => handleBuyNow(p)} onLike={handleLike} onClick={setSelectedProduct} isHighlighted={highlightedProductIds.includes(product.id)} />
                   </motion.div>
                 ))}
               </motion.div>
@@ -554,7 +565,7 @@ export default function App() {
       />
 
       {selectedProduct && (
-        <ProductDetail product={selectedProduct} allProducts={products} onClose={() => setSelectedProduct(null)} onAddToCart={(p, q, c, s) => handleAddToCart(p, q, c, s)} onProductSelect={setSelectedProduct} user={user} />
+        <ProductDetail product={selectedProduct} allProducts={products} onClose={() => setSelectedProduct(null)} onAddToCart={(p, q, c, s) => handleAddToCart(p, q, c, s)} onBuyNow={(p, q, c, s) => handleBuyNow(p, q, c, s)} onProductSelect={setSelectedProduct} user={user} />
       )}
 
       <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} items={cartItems} onUpdateQuantity={handleUpdateQuantity} onRemoveItem={handleRemoveItem} onCheckout={handleCheckout} user={user} />

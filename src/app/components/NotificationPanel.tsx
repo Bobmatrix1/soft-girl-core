@@ -56,9 +56,10 @@ export default function NotificationPanel({
         {!showDeleteConfirm && (
           <motion.div
             ref={panelRef}
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
             className="fixed top-20 right-4 w-80 bg-white/90 backdrop-blur-xl border border-pink-100 rounded-2xl shadow-2xl z-[60]"
           >
             <div className="flex items-center justify-between p-4 border-b border-pink-100">

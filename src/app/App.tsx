@@ -535,7 +535,7 @@ export default function App() {
             <>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
                 {filteredProducts.slice(0, displayLimit).map((product, index) => (
-                  <motion.div key={product.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: (index % 30) * 0.05 }}>
+                  <motion.div key={product.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: (index % 30) * 0.03, duration: 0.2 }}>
                     <ProductCard product={product} onAddToCart={(p, q, c, s) => handleAddToCart(p, q, c, s)} onBuyNow={(p) => handleBuyNow(p)} onLike={handleLike} onClick={setSelectedProduct} isHighlighted={highlightedProductIds.includes(product.id)} />
                   </motion.div>
                 ))}

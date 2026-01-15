@@ -60,7 +60,7 @@ export default function NotificationPanel({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed top-20 right-4 w-80 bg-white/90 backdrop-blur-xl border border-pink-100 rounded-2xl shadow-2xl z-[60]"
+            className="fixed top-20 right-4 w-80 bg-white/90 backdrop-blur-md border border-pink-100 rounded-2xl shadow-2xl z-[60]"
           >
             <div className="flex items-center justify-between p-4 border-b border-pink-100">
               <h3 className="font-semibold text-lg flex items-center gap-2"><Bell className="w-5 h-5"/> Notifications</h3>

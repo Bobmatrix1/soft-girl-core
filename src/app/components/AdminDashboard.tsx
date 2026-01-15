@@ -88,6 +88,7 @@ function OrderCard({ order, onStatusUpdate }: { order: Order; onStatusUpdate: (s
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
                 className="overflow-hidden space-y-4"
             >
                 {/* Shipping Details */}
@@ -1262,7 +1263,7 @@ export default function AdminDashboard({ onClose, onDataChange }: AdminDashboard
                         onChange={(e) => setAnnouncement(e.target.value)}
                         placeholder="e.g., The summer collection is now live!"
                     />
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                         <Button onClick={handleSendAnnouncement}>Send to All Users</Button>
                         <Button variant="destructive" onClick={handleClearAnnouncements}>Clear All Announcements</Button>
                     </div>

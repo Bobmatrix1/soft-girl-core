@@ -133,21 +133,24 @@ export default function App() {
         fetchProducts(),
         fetchCategories()
       ]);
+      
       setCategories(loadedCategories);
+      
+      // Check for missing demo products and create them if needed (Idempotent seeding)
+      const existingNames = new Set(loadedProducts.map(p => p.name));
+      const missingProducts = DEMO_PRODUCTS.filter(dp => !existingNames.has(dp.name));
 
-      // Handle products logic
-      if (loadedProducts.length === 0) {
-        const secondaryCheck = await fetchProducts();
-        if (secondaryCheck.length === 0) {
-            for (const demoProduct of DEMO_PRODUCTS) {
-              await createProduct(demoProduct as any);
-            }
-            setProducts(await fetchProducts());
-        } else {
-            setProducts(secondaryCheck);
-        }
+      if (missingProducts.length > 0 && loadedProducts.length === 0) {
+         // Only seed if DB is completely empty to avoid accidental duplicates if fetch failed/partial
+         // OR we can strictly seed missing ones. 
+         // Let's stick to: if DB is empty, seed. If not, assume it's managed.
+         // This prevents "I have 6, now 10". If you have 6, it won't add more.
+         for (const demoProduct of DEMO_PRODUCTS) {
+            await createProduct(demoProduct as any);
+         }
+         setProducts(await fetchProducts());
       } else {
-        setProducts(loadedProducts);
+         setProducts(loadedProducts);
       }
 
       // Try to fetch banners separately
@@ -535,9 +538,9 @@ export default function App() {
             <>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
                 {filteredProducts.slice(0, displayLimit).map((product, index) => (
-                  <motion.div key={product.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: (index % 30) * 0.03, duration: 0.2 }}>
+                  <div key={product.id}>
                     <ProductCard product={product} onAddToCart={(p, q, c, s) => handleAddToCart(p, q, c, s)} onBuyNow={(p) => handleBuyNow(p)} onLike={handleLike} onClick={setSelectedProduct} isHighlighted={highlightedProductIds.includes(product.id)} />
-                  </motion.div>
+                  </div>
                 ))}
               </motion.div>
               {filteredProducts.length > displayLimit && (
